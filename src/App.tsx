@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import type { Task } from "./Types";
+import "./style/style.css";
 
 function App() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -55,8 +56,10 @@ function App() {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: "auto", padding: 20 }}>
-      <h1>My To-do App</h1>
+    <div
+      className="container"
+    >
+      <h1>My Todo App</h1>
       <TaskForm
         onAddTask={editingTask ? updateTask : addTask}
         initialTask={editingTask}

@@ -17,7 +17,7 @@ const TaskList = ({
   return (
     <ul>
       {tasks.map((task) => (
-        <li key={task.id}>
+        <li className="tasks-list" key={task.id}>
           <span
             onClick={() => onToggleComplete(task.id)}
             style={{
@@ -27,17 +27,16 @@ const TaskList = ({
           >
             {task.description} - {task.deadline}
           </span>
-          <button onClick={() => onStartEdit(task)}>Edit</button>
+           <br />
+          <button className="edit-btn" onClick={() => onStartEdit(task)}>Edit</button>
           <button
+          className="delete-btn"
             onClick={() => onDelete(task.id)}
-            style={{
-              backgroundColor: "red",
-              color: "white",
-            }}
+            
           >
             Delete
           </button>
-        </li>
+       </li>
       ))}
     </ul>
   );

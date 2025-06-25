@@ -36,15 +36,16 @@ const TaskForm = ({
     }
   };
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit}>
+    <div className="form-element">
+      <form className="form" onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Task description"
+          placeholder="Task"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
         />
+        <br />
         <input
           type="date"
           placeholder="Task deadline"
@@ -52,10 +53,10 @@ const TaskForm = ({
           onChange={(e) => setDeadline(e.target.value)}
           required
         />
-        <div className="space-x-2">
-          <button type="submit">{initialTask ? "Save" : "Add Task"}</button>
+        <div className="btns">
+          <button className="add-btn" type="submit">{initialTask ? "Save" : "Add Task"}</button>
           {initialTask && (
-            <button type="button" onClick={onCancel}>
+            <button className="cencel-btn" type="button" onClick={onCancel}>
               Cancel
             </button>
           )}
