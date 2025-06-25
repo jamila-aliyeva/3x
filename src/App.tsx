@@ -4,17 +4,18 @@ import TaskList from "./components/TaskList";
 import type { Task } from "./Types";
 
 function App() {
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [tasks, setTasks] = useState<Task[]>(() => {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : [];
   });
 
-  // useEffect(() => {
-  //   const saved = localStorage.getItem("tasks");
-  //   if (saved) {
-  //     setTasks(JSON.parse(saved));
-  //   }
-  // }, []);
+  useEffect(() => {
+    const saved = localStorage.getItem("tasks");
+    if (saved) {
+      setTasks(JSON.parse(saved));
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -30,6 +31,16 @@ function App() {
     setTasks((prev) => [...prev, newTask]);
   };
 
+  const updateTask = (description: string, deadline: string) => {
+    if (!editingTask) return;
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === editingTask.id ? { ...t, description, deadline } : t
+      )
+    );
+    setEditingTask(null);
+  };
+
   const onToggleComplete = (id: number) => {
     setTasks((prev) =>
       prev.map((task) =>
@@ -40,16 +51,22 @@ function App() {
 
   const deleteTask = (id: number) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
+    if (editingTask?.id === id) setEditingTask(null);
   };
 
   return (
     <div style={{ maxWidth: 500, margin: "auto", padding: 20 }}>
       <h1>My To-do App</h1>
-      <TaskForm onAddTask={addTask} />
+      <TaskForm
+        onAddTask={editingTask ? updateTask : addTask}
+        initialTask={editingTask}
+        onCancel={() => setEditingTask(null)}
+      />
       <TaskList
         tasks={tasks}
         onToggleComplete={onToggleComplete}
         onDelete={deleteTask}
+        onStartEdit={(task) => setEditingTask(task)}
       />
     </div>
   );

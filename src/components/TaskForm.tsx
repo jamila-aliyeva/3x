@@ -1,20 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import type { Task } from "../Types";
 
 interface TaskFormProps {
   onAddTask: (description: string, deadline: string) => void;
+  initialTask: Task | null;
+  onCancel: () => void;
 }
 
-const TaskForm = ({ onAddTask }: TaskFormProps) => {
+const TaskForm = ({
+  onAddTask,
+  onCancel,
+  initialTask = null,
+}: TaskFormProps) => {
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
+
+  useEffect(() => {
+    if (initialTask) {
+      setDescription(initialTask.description);
+      setDeadline(initialTask.deadline);
+    } else {
+      setDeadline("");
+      setDescription("");
+    }
+  }, [initialTask]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!description || !deadline) return;
     onAddTask(description, deadline);
-    setDeadline("");
-    setDescription("");
+    if (!initialTask) {
+      setDeadline("");
+      setDescription("");
+    }
   };
   return (
     <div className="container">
@@ -33,7 +52,15 @@ const TaskForm = ({ onAddTask }: TaskFormProps) => {
           onChange={(e) => setDeadline(e.target.value)}
           required
         />
-        <button>Add Task</button>
+        <div className="space-x-2">
+          <button type="submit">{initialTask ? "Save" : "Add Task"}</button>
+          {initialTask && (
+            <button type="button" onClick={onCancel}>
+              Cancel
+            </button>
+          )}
+        </div>
+        {/* <button>Add Task</button> */}
       </form>
     </div>
   );

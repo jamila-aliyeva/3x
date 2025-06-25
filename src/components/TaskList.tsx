@@ -5,9 +5,15 @@ interface TaskListProps {
   tasks: Task[];
   onToggleComplete: (id: number) => void;
   onDelete: (id: number) => void;
+  onStartEdit: (task: Task) => void;
 }
 
-const TaskList = ({ tasks, onToggleComplete, onDelete }: TaskListProps) => {
+const TaskList = ({
+  tasks,
+  onToggleComplete,
+  onDelete,
+  onStartEdit,
+}: TaskListProps) => {
   return (
     <ul>
       {tasks.map((task) => (
@@ -21,6 +27,7 @@ const TaskList = ({ tasks, onToggleComplete, onDelete }: TaskListProps) => {
           >
             {task.description} - {task.deadline}
           </span>
+          <button onClick={() => onStartEdit(task)}>Edit</button>
           <button
             onClick={() => onDelete(task.id)}
             style={{
